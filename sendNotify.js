@@ -99,7 +99,7 @@ async function sendNotify(text, desp, params = {}) {
   await qywxBotNotify(text, desp); //企业微信机器人
   await qywxamNotify(text, desp); //企业微信应用消息推送
   await iGotNotify(text, desp, params);//iGot
-  await CoolPush(text, desp);//QQ酷推
+  //await CoolPush(text, desp);//QQ酷推
 }
 
 function serverNotify(text, desp, timeout = 2100) {
