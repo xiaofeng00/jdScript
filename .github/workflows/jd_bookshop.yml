@@ -1,0 +1,28 @@
+name: 京东口袋书店
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "1 8,12,18 * * *"
+    watch:
+        types: [jd_bookshop]
+        
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        if: github.event.repository.owner.id == github.event.sender.id
+        steps:
+            - uses: actions/checkout@v1
+            - name: Use Node.js 10.x
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 10.x
+            - name: npm install
+              run: |
+                  npm install
+            - name: "运行 【京东口袋书店】"
+              run: |
+                  node jd_bookshop.js
+              env:
+                  JD_COOKIE: ${{ secrets.JD_COOKIE || github.event.client_payload.JD_COOKIE }}
+                  PUSH_KEY: ${{ secrets.PUSH_KEY }} || github.event.client_payload.PUSH_KEY }}
