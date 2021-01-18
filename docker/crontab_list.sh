@@ -4,8 +4,8 @@
 50 23 */3 * * rm -rf /scripts/logs/*.log
 
 ##############短期活动##############
-
-
+#年货节(活动时间：2021年1月9日-2021年2月9日)
+10 8 * * * node /scripts/jd_nh.js >> /scripts/logs/jd_nh.log 2>&1
 ##############长期活动##############
 # 签到
 0 0,18 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
@@ -87,3 +87,5 @@
 27 7 * * * node /scripts/jd_cash.js >> /scripts/logs/jd_cash.log 2>&1
 # 京喜app签到
 39 7 * * * node /scripts/jx_sign.js >> /scripts/logs/jx_sign.log 2>&1
+#京东家庭号(暂不知最佳cron)
+*/20 * * * * node /scripts/jd_family.js >> /scripts/logs/jd_family.log 2>&1
