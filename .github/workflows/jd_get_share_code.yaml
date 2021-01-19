@@ -1,40 +1,43 @@
+
 name: 打印互助码
 
 on:
-    workflow_dispatch:
-    schedule:
-        - cron: "20 0 * * 6"
-    watch:
-        types: [started]
-    repository_dispatch:
-        types: jd_car_exchange
-
+  workflow_dispatch:
+  schedule:
+    - cron: '0 16 * * *'
+  watch:
+    types: started
+  repository_dispatch:
+    types: jd_scripts
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache node_modules
+        uses: actions/cache@v2 # 使用 GitHub 官方的缓存 Action。
         env:
-            JD_COOKIE: ${{ secrets.JD_COOKIE }}
-        steps:
-            - uses: actions/checkout@v2
-              with:
-                ref: main
-            # 使用node12
-            - name: Use Node.js 12.x
-              uses: actions/setup-node@v1
-              with:
-                  node-version: 12.x
-            - name: npm install
-              run: |
-                  npm install
-            - name: '运行 【打印互助码】'
-              if: env.JD_COOKIE
-              run: |
-                  node jd_get_share_code.js
-              env:
-                  PUSH_KEY: ${{ secrets.PUSH_KEY }}
-                  BARK_PUSH: ${{ secrets.BARK_PUSH }}
-                  TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-                  TG_USER_ID: ${{ secrets.TG_USER_ID }}
-                  BARK_SOUND: ${{ secrets.BARK_SOUND }}
-                  DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-                  DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+          cache-name: cache-node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }} # 使用 package-lock.json 的 Hash 作为缓存的 key。也可以使用 package.json 代替
+      - name: npm install
+        run: |
+          npm install
+      - name: '运行 【打印互助码脚本】'
+        run: |
+          node jd_get_share_code.js
+        env:
+          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          PUSH_KEY: ${{ secrets.PUSH_KEY }}
+          DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+          DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+          JD_DEBUG: ${{ secrets.JD_DEBUG }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_USER_ID: ${{ secrets.TG_USER_ID }}
