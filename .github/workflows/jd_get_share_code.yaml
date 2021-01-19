@@ -1,0 +1,40 @@
+name: 打印互助码
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "20 0 * * 6"
+    watch:
+        types: [started]
+    repository_dispatch:
+        types: jd_car_exchange
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        env:
+            JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                ref: main
+            # 使用node12
+            - name: Use Node.js 12.x
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 12.x
+            - name: npm install
+              run: |
+                  npm install
+            - name: '运行 【打印互助码】'
+              if: env.JD_COOKIE
+              run: |
+                  node jd_get_share_code.js
+              env:
+                  PUSH_KEY: ${{ secrets.PUSH_KEY }}
+                  BARK_PUSH: ${{ secrets.BARK_PUSH }}
+                  TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+                  TG_USER_ID: ${{ secrets.TG_USER_ID }}
+                  BARK_SOUND: ${{ secrets.BARK_SOUND }}
+                  DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+                  DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}

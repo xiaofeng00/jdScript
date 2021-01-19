@@ -1,0 +1,39 @@
+  
+name: crazy joy挂机
+
+on:
+  workflow_dispatch:
+  schedule:
+     - cron: '10 4,10,16,22 * * *'
+  watch:
+    types: started
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+      # 使用node12
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: npm install
+        run: |
+          npm install
+      - name: '运行 【crazy joy挂机】'
+        if: env.JD_COOKIE
+        run: |
+          node jd_crazy_joy_coin.js
+        env:
+          PUSH_KEY: ${{ secrets.PUSH_KEY }}
+          BARK_PUSH: ${{ secrets.BARK_PUSH }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_USER_ID: ${{ secrets.TG_USER_ID }}
+          BARK_SOUND: ${{ secrets.BARK_SOUND }}
+          DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+          DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
