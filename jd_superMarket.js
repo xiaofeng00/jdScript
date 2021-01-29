@@ -2,7 +2,7 @@
  * @Author: LXK9301 https://github.com/LXK9301
  * @Date: 2020-08-16 18:54:16
  * @Last Modified by: LXK9301
- * @Last Modified time: 2021-1-22 21:22:37
+ * @Last Modified time: 2021-1-29 21:22:37
  */
 /*
 东东超市
@@ -194,16 +194,16 @@ async function doDailyTask() {
         }
       }
       if (item.type === 10) {
-        //关注店铺
+        //关注商品领蓝币
         if (item.taskStatus === 0) {
-          console.log('开始关注店铺')
+          console.log('关注商品')
           const itemId = item.content[item.type].itemId;
           const res = await smtgDoShopTask(item.taskId, itemId);
           console.log(`${item.subTitle}结果${JSON.stringify(res)}`);
         }
       }
       if ((item.type === 8 || item.type === 2 || item.type === 10) && item.taskStatus === 0) {
-        await doDailyTask();
+        // await doDailyTask();
       }
     }
   }

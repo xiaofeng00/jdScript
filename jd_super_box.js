@@ -14,7 +14,7 @@
 ============Quantumultx===============
 [task_local]
 #京东超级盒子
-20 7 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_super_box.js, tag=京东超级盒子, enabled=true
+20 7 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_super_box.js, tag=京东超级盒子, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
 
 ================Loon==============
 [Script]
@@ -282,8 +282,12 @@ function draw() {
             data = JSON.parse(data);
             if (data.success) {
               if(data.data.discount) {
-                $.earn += parseFloat(data.data.discount)
-                console.log(`获得${data.data.discount}红包`)
+                if(data.data.rewardType===2) {
+                  $.earn += parseFloat(data.data.discount)
+                  console.log(`获得${data.data.discount}红包`)
+                }else{
+                  console.log(`获得优惠券`)
+                }
               }
               else
                 console.log(`获得空气`)
