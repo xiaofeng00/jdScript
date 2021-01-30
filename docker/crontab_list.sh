@@ -1,5 +1,3 @@
-#必须要的默认定时任务请勿删除
-52 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1
 # 每3天的23:50分清理一次日志
 50 23 */3 * * rm -rf /scripts/logs/*.log
 
@@ -22,6 +20,9 @@
 
 #京东神仙书院答题(活动时间:2021-1-20至2021-2-5)
 5 1 * * * node /scripts/jd_immortal_answer.js >> /scripts/logs/jd_immortal_answer.log 2>&1
+# 5G狂欢城
+0 */6 * * * node /scripts/jd_5g.js >> /scripts/log/jd_5g.log 2>&1
+
 
 ##############长期活动##############
 # 签到
